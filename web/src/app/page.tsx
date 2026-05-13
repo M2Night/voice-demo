@@ -1,3 +1,5 @@
+import TokenProbe from "./components/TokenProbe";
+
 export default function Home() {
   return (
     <div className="flex flex-1 items-center justify-center bg-zinc-50 px-6 py-16 dark:bg-zinc-950">
@@ -28,19 +30,8 @@ export default function Home() {
           A real-time voice conversation, built on LiveKit and Fish Audio.
         </p>
 
-        {/* CTA placeholder (P0: not wired up yet) */}
-        <div className="mt-10 flex flex-col items-start gap-3">
-          <button
-            type="button"
-            disabled
-            className="cursor-not-allowed rounded-full bg-zinc-900 px-6 py-3 text-base font-medium text-white opacity-50 dark:bg-white dark:text-zinc-900"
-          >
-            Start call
-          </button>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">
-            Coming soon — voice pipeline lands in P4.
-          </span>
-        </div>
+        {/* P1 probe */}
+        <TokenProbe />
 
         {/* Build status */}
         <div className="mt-16 rounded-2xl border border-zinc-200 bg-white p-6 text-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -52,7 +43,10 @@ export default function Home() {
               <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
               P0 — Static page deployed to the public web
             </li>
-            <li className="opacity-50">P1 — Token API</li>
+            <li>
+              <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
+              P1 — Token API
+            </li>
             <li className="opacity-50">P2 — Browser joins LiveKit room</li>
             <li className="opacity-50">P3 — Agent worker on cloud</li>
             <li className="opacity-50">P4 — Fish Audio TTS</li>
