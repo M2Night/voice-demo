@@ -55,7 +55,10 @@ export default function Home() {
               <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
               P3 — Agent worker on cloud
             </li>
-            <li className="opacity-50">P4 — Fish Audio TTS</li>
+            <li>
+              <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
+              P4 — Fish Audio TTS
+            </li>
             <li className="opacity-50">P5 — STT + LLM loop</li>
             <li className="opacity-50">P6 — Business state machine</li>
             <li className="opacity-50">P7 — Stability polish</li>

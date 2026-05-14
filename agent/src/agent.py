@@ -1,4 +1,5 @@
 import logging
+import os
 import textwrap
 
 from dotenv import load_dotenv
@@ -12,7 +13,7 @@ from livekit.agents import (
     inference,
     room_io,
 )
-from livekit.plugins import ai_coustics, silero
+from livekit.plugins import ai_coustics, fishaudio, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 
 logger = logging.getLogger("agent")
@@ -115,9 +116,16 @@ async def my_agent(ctx: JobContext):
         # See all available models at https://docs.livekit.io/agents/models/stt/
         stt=inference.STT(model="deepgram/nova-3", language="en"),
         # Text-to-speech (TTS) is your agent's voice, turning the LLM's text into speech that the user can hear
-        # See all available models as well as voice selections at https://docs.livekit.io/agents/models/tts/
-        tts=inference.TTS(
-            model="cartesia/sonic-3", voice="9626c31c-bec5-4cca-baa8-f8ba9e84c8bc"
+        # Switched from LiveKit Inference (Cartesia) to Fish Audio per the
+        # demo's hard constraint. The plugin reads FISH_API_KEY from the
+        # environment. We also read FISH_VOICE_ID from env so the voice can
+        # be swapped without a redeploy of the code — just `lk agent
+        # update-secrets`. If FISH_VOICE_ID is unset, the plugin's default
+        # voice is used.
+        # See https://pypi.org/project/livekit-plugins-fishaudio/
+        tts=fishaudio.TTS(
+            **({"voice_id": os.environ["FISH_VOICE_ID"]}
+               if os.getenv("FISH_VOICE_ID") else {})
         ),
         # VAD and turn detection are used to determine when the user is speaking and when the agent should respond
         # See more at https://docs.livekit.io/agents/build/turns
