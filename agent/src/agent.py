@@ -155,6 +155,14 @@ async def my_agent(ctx: JobContext):
     # Join the room and connect to the user
     await ctx.connect()
 
+    # Greet the user proactively as soon as the session is up.
+    # Without this, the agent would silently wait for the user to speak first.
+    await session.generate_reply(
+        instructions=(
+            "Greet the user warmly in one short sentence and offer your help."
+        )
+    )
+
 
 if __name__ == "__main__":
     cli.run_app(server)

@@ -137,7 +137,7 @@ export default function CallPanel() {
       </div>
 
       <span className="text-xs text-zinc-500 dark:text-zinc-400">
-        P2 — joins a LiveKit room and publishes your microphone. No agent yet.
+        Click Start to talk to the agent. The agent will greet you first.
       </span>
 
       {/* Status / debug panel */}
