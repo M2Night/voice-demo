@@ -1,4 +1,4 @@
-import TokenProbe from "./components/TokenProbe";
+import CallPanel from "./components/CallPanel";
 
 export default function Home() {
   return (
@@ -30,8 +30,8 @@ export default function Home() {
           A real-time voice conversation, built on LiveKit and Fish Audio.
         </p>
 
-        {/* P1 probe */}
-        <TokenProbe />
+        {/* Call controls */}
+        <CallPanel />
 
         {/* Build status */}
         <div className="mt-16 rounded-2xl border border-zinc-200 bg-white p-6 text-sm dark:border-zinc-800 dark:bg-zinc-900">
@@ -47,7 +47,10 @@ export default function Home() {
               <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
               P1 — Token API
             </li>
-            <li className="opacity-50">P2 — Browser joins LiveKit room</li>
+            <li>
+              <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
+              P2 — Browser joins LiveKit room
+            </li>
             <li className="opacity-50">P3 — Agent worker on cloud</li>
             <li className="opacity-50">P4 — Fish Audio TTS</li>
             <li className="opacity-50">P5 — STT + LLM loop</li>
