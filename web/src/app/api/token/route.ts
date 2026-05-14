@@ -1,5 +1,9 @@
 import { NextResponse } from "next/server";
-import { AccessToken } from "livekit-server-sdk";
+import {
+  AccessToken,
+  RoomAgentDispatch,
+  RoomConfiguration,
+} from "livekit-server-sdk";
 
 /**
  * GET /api/token
@@ -7,15 +11,18 @@ import { AccessToken } from "livekit-server-sdk";
  * Returns a short-lived LiveKit access token for a fresh, ephemeral room.
  * The browser uses this token to join the room via the LiveKit Web SDK.
  *
- * For P1 we only verify that the token is correctly signed and returns
- * the expected shape. The frontend does not yet connect to LiveKit.
+ * The token also embeds a RoomConfiguration that tells LiveKit Cloud to
+ * dispatch our agent (`agent_name=agent`) into this room as soon as it is
+ * created. That way the user sees `participants: 2` (self + agent) instead
+ * of having to manually trigger a dispatch.
  *
  * Optional query params:
  *   ?identity=alice   – override participant identity (default: random)
  *   ?room=demo-xyz    – override room name (default: random `demo-<short-uuid>`)
  */
 export async function GET(request: Request) {
-  const { LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET } = process.env;
+  const { LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET, LIVEKIT_AGENT_NAME } =
+    process.env;
 
   if (!LIVEKIT_URL || !LIVEKIT_API_KEY || !LIVEKIT_API_SECRET) {
     return NextResponse.json(
@@ -26,6 +33,10 @@ export async function GET(request: Request) {
       { status: 500 },
     );
   }
+
+  // Default agent name matches what `lk agent init` scaffolded:
+  // see `agent/src/agent.py` → `@server.rtc_session(agent_name="agent")`.
+  const agentName = LIVEKIT_AGENT_NAME ?? "agent";
 
   const { searchParams } = new URL(request.url);
   const shortId = crypto.randomUUID().slice(0, 8);
@@ -45,6 +56,16 @@ export async function GET(request: Request) {
     canPublishData: true,
   });
 
+  // Auto-dispatch the agent into this room. LiveKit Cloud will look for any
+  // worker that registered with this agent name and route a job to it.
+  at.roomConfig = new RoomConfiguration({
+    agents: [
+      new RoomAgentDispatch({
+        agentName,
+      }),
+    ],
+  });
+
   const token = await at.toJwt();
 
   return NextResponse.json({
@@ -52,5 +73,6 @@ export async function GET(request: Request) {
     token,
     room,
     identity,
+    agentName,
   });
 }
