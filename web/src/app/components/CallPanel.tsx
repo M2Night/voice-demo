@@ -16,10 +16,15 @@ type TokenResponse = {
   identity: string;
 };
 
+type Commitment = {
+  amount: string;
+  date: string;
+};
+
 type UiState =
   | { kind: "idle" }
   | { kind: "connecting" }
-  | { kind: "connected"; room: string; identity: string; participants: number }
+  | { kind: "connected"; room: string; identity: string; participants: number; commitment?: Commitment }
   | { kind: "error"; message: string };
 
 export default function CallPanel() {
@@ -35,9 +40,30 @@ export default function CallPanel() {
       kind: "connected",
       room: room.name,
       identity: room.localParticipant.identity,
-      // remoteParticipants excludes us, so +1 for the local participant
       participants: room.remoteParticipants.size + 1,
     });
+  }, []);
+
+  // Handle data channel messages from agent
+  const handleDataMessage = useCallback((payload: Uint8Array) => {
+    try {
+      const text = new TextDecoder().decode(payload);
+      const msg = JSON.parse(text) as { type: string; [key: string]: unknown };
+      if (msg.type === "commitment_reached") {
+        setUi((prev) => {
+          if (prev.kind !== "connected") return prev;
+          return {
+            ...prev,
+            commitment: {
+              amount: String(msg.amount),
+              date: String(msg.date),
+            },
+          };
+        });
+      }
+    } catch {
+      // ignore parse errors
+    }
   }, []);
 
   async function startCall() {
@@ -75,11 +101,13 @@ export default function CallPanel() {
           setUi({ kind: "idle" });
           roomRef.current = null;
         })
-        // Auto-play any remote audio (the agent, once we add one in P3+).
         .on(RoomEvent.TrackSubscribed, (track: RemoteTrack) => {
           if (track.kind === Track.Kind.Audio && audioRef.current) {
             track.attach(audioRef.current);
           }
+        })
+        .on(RoomEvent.DataReceived, ({ payload }) => {
+          handleDataMessage(payload);
         });
 
       // 3. Connect, then publish the microphone.
@@ -155,6 +183,20 @@ export default function CallPanel() {
             <dt className="text-zinc-500">participants</dt>
             <dd>{ui.participants}</dd>
           </dl>
+        </div>
+      )}
+
+      {/* Commitment reached */}
+      {ui.kind === "connected" && ui.commitment && (
+        <div className="w-full max-w-xl rounded-xl border border-emerald-300 bg-emerald-50 p-4 dark:border-emerald-800 dark:bg-emerald-950/40">
+          <div className="mb-1 flex items-center gap-2 font-medium text-emerald-700 dark:text-emerald-300">
+            <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" />
+            Commitment Reached
+          </div>
+          <p className="text-sm text-emerald-800 dark:text-emerald-200">
+            Debtor agreed to pay <strong>{ui.commitment.amount}</strong> on{" "}
+            <strong>{ui.commitment.date}</strong>.
+          </p>
         </div>
       )}
 
