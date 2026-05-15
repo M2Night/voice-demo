@@ -165,7 +165,7 @@ export default function CallPanel() {
       </div>
 
       <span className="text-xs text-zinc-500 dark:text-zinc-400">
-        Click Start to talk to the agent. The agent will greet you first.
+        Click Start call to speak with our representative.
       </span>
 
       {/* Status / debug panel */}
@@ -191,10 +191,10 @@ export default function CallPanel() {
         <div className="w-full max-w-xl rounded-xl border border-emerald-300 bg-emerald-50 p-4 dark:border-emerald-800 dark:bg-emerald-950/40">
           <div className="mb-1 flex items-center gap-2 font-medium text-emerald-700 dark:text-emerald-300">
             <span className="inline-block h-2 w-2 rounded-full bg-emerald-500" />
-            Commitment Reached
+            Payment Commitment Received
           </div>
           <p className="text-sm text-emerald-800 dark:text-emerald-200">
-            Debtor agreed to pay <strong>{ui.commitment.amount}</strong> on{" "}
+            You agreed to pay <strong>{ui.commitment.amount}</strong> on{" "}
             <strong>{ui.commitment.date}</strong>.
           </p>
         </div>

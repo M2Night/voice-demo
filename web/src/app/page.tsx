@@ -2,71 +2,39 @@ import CallPanel from "./components/CallPanel";
 
 export default function Home() {
   return (
-    <div className="flex flex-1 items-center justify-center bg-zinc-50 px-6 py-16 dark:bg-zinc-950">
+    <div className="flex flex-1 items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100 px-6 py-16 dark:from-zinc-950 dark:to-zinc-900">
       <main className="w-full max-w-2xl">
         {/* Brand */}
-        <div className="mb-10 flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-sm font-semibold text-white dark:bg-white dark:text-zinc-900">
+        <div className="mb-12 flex items-center gap-3">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-blue-700 text-base font-bold text-white shadow-lg">
             AF
           </div>
           <div className="flex flex-col">
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            <span className="text-base font-semibold text-zinc-900 dark:text-zinc-100">
               Acme Finance
             </span>
             <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Voice Agent Demo
+              Accounts Receivable
             </span>
           </div>
         </div>
 
         {/* Hero */}
-        <h1 className="text-4xl font-semibold leading-tight tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl">
-          Talk to an AI
+        <h1 className="text-4xl font-bold leading-tight tracking-tight text-zinc-900 dark:text-zinc-50 sm:text-5xl">
+          We need to discuss
           <br />
-          debt-collection agent.
+          <span className="text-blue-600 dark:text-blue-400">your account</span>
         </h1>
         <p className="mt-6 max-w-xl text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-          You play the debtor. The agent calls to collect a repayment commitment.
-          A real-time voice conversation, built on LiveKit and Fish Audio.
+          You have an overdue balance that requires your attention.
+          Our representative is ready to discuss payment options with you.
         </p>
 
         {/* Call controls */}
         <CallPanel />
 
-        {/* Build status */}
-        <div className="mt-16 rounded-2xl border border-zinc-200 bg-white p-6 text-sm dark:border-zinc-800 dark:bg-zinc-900">
-          <h2 className="mb-3 font-medium text-zinc-900 dark:text-zinc-100">
-            Build progress
-          </h2>
-          <ul className="space-y-1.5 text-zinc-600 dark:text-zinc-400">
-            <li>
-              <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
-              P0 — Static page deployed to the public web
-            </li>
-            <li>
-              <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
-              P1 — Token API
-            </li>
-            <li>
-              <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
-              P2 — Browser joins LiveKit room
-            </li>
-            <li>
-              <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
-              P3 — Agent worker on cloud
-            </li>
-            <li>
-              <span className="mr-2 text-emerald-600 dark:text-emerald-400">✓</span>
-              P4 — Fish Audio TTS
-            </li>
-            <li className="opacity-50">P5 — STT + LLM loop</li>
-            <li className="opacity-50">P6 — Business state machine</li>
-            <li className="opacity-50">P7 — Stability polish</li>
-          </ul>
-        </div>
-
-        <footer className="mt-12 text-xs text-zinc-400 dark:text-zinc-600">
-          Demo only. No real debt, no real customer data.
+        <footer className="mt-16 text-xs text-zinc-400 dark:text-zinc-600">
+          This is a practice simulation. No actual debt collection will occur.
         </footer>
       </main>
     </div>
